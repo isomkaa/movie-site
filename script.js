@@ -226,6 +226,45 @@ function showToast(message, isError = false) {
         toast.classList.add("hidden");
     }, 3000);
 }
+async function openMovieDetails(imdbID) {
+    modal.classList.remove("hidden");
+    modalBody.innerHTML = `<div class="spinner" style="margin: 50px auto;"></div>`;
 
+    try {
+        // Fetch full plot and details using the IMDb ID
+        const res = await fetch(`https://www.omdbapi.com/?i=${imdbID}&plot=full&apikey=${API_KEY}`);
+        const data = await res.json();
+
+        if(data.Response === "True") {
+            const posterSrc = data.Poster !== "N/A" ? data.Poster : "https://via.placeholder.com/300x450?text=No+Poster";
+            
+            modalBody.innerHTML = `
+                <img src="${posterSrc}" class="modal-poster" alt="${data.Title}">
+                <div class="modal-info">
+                    <h2>${data.Title} (${data.Year})</h2>
+                    <p class="tagline">${data.Genre} | ${data.Runtime}</p>
+                    
+                    <div class="modal-badges">
+                        <span>⭐ ${data.imdbRating} / 10</span>
+                        <span>🍅 ${data.Ratings.find(r => r.Source === "Rotten Tomatoes")?.Value || "N/A"}</span>
+                        <span>PG: ${data.Rated}</span>
+                    </div>
+
+                    <p class="modal-plot">${data.Plot}</p>
+                    
+                    <p><strong>Director:</strong> ${data.Director}</p>
+                    <p><strong>Cast:</strong> ${data.Actors}</p>
+                    <p style="margin-top: 10px; color: var(--accent);"><i class="fas fa-trophy"></i> ${data.Awards}</p>
+                    
+                    <a href="https://www.imdb.com/title/${data.imdbID}/" target="_blank" class="btn-imdb">
+                        <i class="fas fa-external-link-alt"></i> View on IMDb
+                    </a>
+                </div>
+            `;
+        }
+    } catch (err) {
+        modalBody.innerHTML = `<h3 class="error" style="padding: 30px;">Failed to load details.</h3>`;
+    }
+}
 // Load Top Movies on initial start
 window.onload = getTopMovies;

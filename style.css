@@ -340,3 +340,28 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     z-index: 9999;
 }
+/* --- IMDb External Link Button --- */
+.btn-imdb {
+    display: inline-block;
+    background: #25303d;
+    color: var(--text-main);
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: 0.3s ease;
+    border: 1px solid var(--text-muted);
+}
+
+.btn-imdb:hover {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 197, 24, 0.3);
+}
+
+.btn-imdb i {
+    margin-right: 8px;
+}
